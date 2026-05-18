@@ -220,7 +220,8 @@
     '微信图片_202605182141268.jpg',
     '微信图片_202605182141269.jpg'
   ];
-  var photos = photoFiles.map(function (f) { return 'zhijiao-photos/' + f; });
+  var thumbs = photoFiles.map(function (f) { return 'zhijiao-photos/thumb/' + f; });
+  var fulls  = photoFiles.map(function (f) { return 'zhijiao-photos/' + f; });
   var currentIndex = 0;
   var galleryBuilt = false;
 
@@ -228,26 +229,43 @@
     if (galleryBuilt) return;
     galleryBuilt = true;
     var galleryGrid = document.getElementById('galleryGrid');
-    photos.forEach(function (src, idx) {
+    fulls.forEach(function (fullSrc, idx) {
       var item = document.createElement('div');
       item.className = 'gallery-item';
-      item.innerHTML = '<img src="' + src + '" alt="支教照片 ' + (idx + 1) + '" loading="lazy">';
+      item.innerHTML = '<div class="gallery-shimmer"></div><img src="' + thumbs[idx] + '" alt="支教照片 ' + (idx + 1) + '" loading="lazy">';
       item.addEventListener('click', function () { openLightbox(idx); });
       galleryGrid.appendChild(item);
+
+      // Preload full image silently, swap in later
+      var fullImg = new Image();
+      fullImg.onload = function () {
+        var imgEl = item.querySelector('img');
+        if (imgEl) { imgEl.src = fullSrc; item.classList.add('loaded'); }
+      };
+      fullImg.src = fullSrc;
     });
   }
 
   // Open gallery
   var galleryOverlay = document.getElementById('galleryOverlay');
-  document.getElementById('openGallery').addEventListener('click', function () {
+  var openBtn = document.getElementById('openGallery');
+
+  // Preload thumbnails on button hover (desktop)
+  openBtn.addEventListener('mouseenter', function () {
+    thumbs.forEach(function (src) {
+      var pre = new Image();
+      pre.src = src;
+    });
+  });
+
+  openBtn.addEventListener('click', function () {
     buildGallery();
     galleryOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
-    // Stagger reveal after a tick for DOM to settle
     requestAnimationFrame(function () {
       var items = galleryGrid.querySelectorAll('.gallery-item');
       items.forEach(function (item, i) {
-        setTimeout(function () { item.classList.add('revealed'); }, i * 40);
+        setTimeout(function () { item.classList.add('revealed'); }, i * 35);
       });
     });
   });
@@ -271,8 +289,8 @@
 
   function openLightbox(idx) {
     currentIndex = idx;
-    lightboxImg.src = photos[idx];
-    lightboxCounter.textContent = (idx + 1) + ' / ' + photos.length;
+    lightboxImg.src = fulls[idx];
+    lightboxCounter.textContent = (idx + 1) + ' / ' + fulls.length;
     lightbox.classList.add('open');
   }
 
@@ -281,9 +299,9 @@
   }
 
   function navLightbox(dir) {
-    currentIndex = (currentIndex + dir + photos.length) % photos.length;
-    lightboxImg.src = photos[currentIndex];
-    lightboxCounter.textContent = (currentIndex + 1) + ' / ' + photos.length;
+    currentIndex = (currentIndex + dir + fulls.length) % fulls.length;
+    lightboxImg.src = fulls[currentIndex];
+    lightboxCounter.textContent = (currentIndex + 1) + ' / ' + fulls.length;
   }
 
   document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
