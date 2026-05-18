@@ -524,6 +524,48 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   border-radius: var(--radius-full);
 }
 
+/* ====== Scroll Progress ====== */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0; height: 2.5px;
+  background: linear-gradient(90deg, var(--mint), #d4a574);
+  z-index: 200;
+  width: 0%;
+  transition: width 0.15s linear;
+  border-radius: 0 2px 0 0;
+}
+
+/* ====== Back to Top ====== */
+.back-to-top {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--mint);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px);
+  transition: opacity 0.3s ease, visibility 0.3s, transform 0.3s var(--ease), background 0.25s;
+  z-index: 99;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+  cursor: pointer;
+  border: none;
+}
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.back-to-top:hover {
+  background: var(--mint-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+}
+
 /* ====== Footer ====== */
 .footer {
   padding: 24px 0;

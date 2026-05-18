@@ -109,8 +109,29 @@
     });
   }
 
-  window.addEventListener('scroll', updateNav, { passive: true });
+  window.addEventListener('scroll', function () {
+    updateNav();
+
+    // Scroll progress
+    var scrollTop = window.scrollY;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    document.getElementById('scrollProgress').style.width = progress + '%';
+
+    // Back to top
+    var backToTop = document.getElementById('backToTop');
+    if (scrollTop > 500) {
+      backToTop.classList.add('visible');
+    } else {
+      backToTop.classList.remove('visible');
+    }
+  }, { passive: true });
   updateNav();
+
+  // Back to top click
+  document.getElementById('backToTop').addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 
   // ====== Scroll reveal ======
   var obs = new IntersectionObserver(function (entries) {
