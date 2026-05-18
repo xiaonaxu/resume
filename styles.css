@@ -930,15 +930,6 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   border-radius: var(--radius-full);
 }
 
-/* ====== Cursor Trail ====== */
-.trail-particle {
-  position: fixed;
-  pointer-events: none;
-  border-radius: 50%;
-  z-index: 9998;
-  will-change: transform, opacity;
-}
-
 /* ====== Scroll Progress ====== */
 .scroll-progress {
   position: fixed;

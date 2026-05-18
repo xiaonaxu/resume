@@ -34,66 +34,61 @@
   setTimeout(hideLoader, 8000);
 
   // ====== Cursor Trail Particles (DOM) ======
-  var trailColors = ['#c17f59', '#d4a574', '#e0b98a', '#f0d5b8', '#e8a87c', '#f5c496', '#fff0e0'];
-  var trailLastSpawn = 0;
-  var trailActive = false;
+  (function () {
+    var colors = ['#c17f59', '#d4a574', '#e0b98a', '#f0d5b8', '#e8a87c', '#f5c496'];
+    var lastSpawn = 0;
 
-  function createParticle(x, y) {
-    var el = document.createElement('div');
-    el.className = 'trail-particle';
-    var size = 3 + Math.random() * 6;
-    var color = trailColors[Math.floor(Math.random() * trailColors.length)];
-    var angle = Math.random() * Math.PI * 2;
-    var dist = 0;
-    var speed = 0.4 + Math.random() * 1.5;
-    var opacity = 1;
-    var decay = 0.012 + Math.random() * 0.025;
-    var vx = Math.cos(angle) * speed;
-    var vy = Math.sin(angle) * speed - 0.5;
+    document.addEventListener('mousemove', function (e) {
+      var now = Date.now();
+      if (now - lastSpawn < 30) return;
+      lastSpawn = now;
 
-    el.style.cssText =
-      'left:' + x + 'px;' +
-      'top:' + y + 'px;' +
-      'width:' + size + 'px;' +
-      'height:' + size + 'px;' +
-      'background:' + color + ';' +
-      'box-shadow: 0 0 ' + (size * 2.5) + 'px ' + (size * 1.2) + 'px ' + color + ';';
+      var count = Math.floor(Math.random() * 2) + 1;
+      for (var i = 0; i < count; i++) {
+        (function (startX, startY) {
+          var dot = document.createElement('div');
+          var size = 3 + Math.random() * 5;
+          var color = colors[Math.floor(Math.random() * colors.length)];
+          var angle = Math.random() * Math.PI * 2;
+          var life = 60 + Math.floor(Math.random() * 60); // frames
+          var frame = 0;
+          var speed = 0.5 + Math.random() * 2;
 
-    document.body.appendChild(el);
+          dot.style.cssText = [
+            'position:fixed',
+            'left:' + startX + 'px',
+            'top:' + startY + 'px',
+            'width:' + size + 'px',
+            'height:' + size + 'px',
+            'background:' + color,
+            'border-radius:50%',
+            'pointer-events:none',
+            'z-index:9998',
+            'box-shadow: 0 0 ' + (size * 3) + 'px ' + size + 'px ' + color
+          ].join(';');
 
-    function update() {
-      dist += speed;
-      x += vx;
-      y += vy;
-      vy += 0.012;
-      opacity -= decay;
+          document.body.appendChild(dot);
 
-      if (opacity <= 0) {
-        el.remove();
-        return;
+          function step() {
+            frame++;
+            var progress = frame / life;
+            var x = Math.cos(angle) * speed * frame;
+            var y = Math.sin(angle) * speed * frame - frame * 0.3;
+            dot.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+            dot.style.opacity = 1 - progress;
+
+            if (frame < life) {
+              requestAnimationFrame(step);
+            } else {
+              dot.remove();
+            }
+          }
+
+          requestAnimationFrame(step);
+        })(e.clientX + (Math.random() - 0.5) * 10, e.clientY + (Math.random() - 0.5) * 6);
       }
-
-      el.style.transform = 'translate(' + (dist * Math.cos(angle)) + 'px,' + (dist * Math.sin(angle) - dist * 0.3) + 'px)';
-      el.style.opacity = opacity;
-
-      requestAnimationFrame(update);
-    }
-
-    requestAnimationFrame(update);
-  }
-
-  document.addEventListener('mousemove', function (e) {
-    var now = performance.now();
-    if (now - trailLastSpawn < 25) return;
-    trailLastSpawn = now;
-    var count = Math.floor(Math.random() * 3) + 1;
-    for (var i = 0; i < count; i++) {
-      createParticle(
-        e.clientX + (Math.random() - 0.5) * 14,
-        e.clientY + (Math.random() - 0.5) * 8
-      );
-    }
-  });
+    });
+  })();
 
   // ====== Theme Toggle ======
   var themeToggle = document.getElementById('themeToggle');
@@ -178,30 +173,11 @@
     // Hero parallax
     var heroBg = document.querySelector('.hero-bg-img');
     var heroContent = document.querySelector('.hero-content');
-    if (heroBg && scrollTop < window.innerHeight) {
-      // Release CSS animation so JS transform can take over
-      if (!heroContent.dataset.parallaxReady) {
-        heroContent.addEventListener('animationend', function () {
-          heroContent.style.animation = 'none';
-          heroContent.style.opacity = '1';
-          heroContent.style.transform = 'translateY(0)';
-          heroContent.dataset.parallaxReady = '1';
-        }, { once: true });
-        // Fallback if animation already ended
-        if (heroContent.style.opacity === '1' || getComputedStyle(heroContent).opacity > 0.9) {
-          heroContent.style.animation = 'none';
-          heroContent.style.opacity = '1';
-          heroContent.style.transform = 'translateY(0)';
-          heroContent.dataset.parallaxReady = '1';
-        }
-      }
-
-      if (heroContent.dataset.parallaxReady) {
+    if (heroBg && heroContent && heroContent.dataset.parallaxReady && scrollTop < window.innerHeight) {
         heroBg.style.transform = 'translateY(' + (scrollTop * 0.35) + 'px) scale(1.05)';
         heroContent.style.transform = 'translateY(' + (scrollTop * 0.12) + 'px)';
         heroContent.style.opacity = Math.max(0, 1 - scrollTop / (window.innerHeight * 0.7));
       }
-    }
 
     // Scroll progress
     var docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -222,6 +198,17 @@
   document.getElementById('backToTop').addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  // ====== Enable parallax after hero animation ======
+  setTimeout(function () {
+    var hc = document.querySelector('.hero-content');
+    if (hc) {
+      hc.style.animation = 'none';
+      hc.style.opacity = '1';
+      hc.style.transform = 'translateY(0)';
+      hc.dataset.parallaxReady = '1';
+    }
+  }, 1500);
 
   // ====== Scroll reveal ======
   var obs = new IntersectionObserver(function (entries) {
