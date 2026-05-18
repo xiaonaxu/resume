@@ -4,6 +4,8 @@
   // ====== Loader ======
   var loader = document.getElementById('loader');
   var loaderHidden = false;
+  var startTime = Date.now();
+  var MIN_SHOW = 2000;
 
   function hideLoader() {
     if (loaderHidden) return;
@@ -16,12 +18,20 @@
     }, 600);
   }
 
-  window.addEventListener('load', function () {
-    setTimeout(hideLoader, 800);
-  });
+  function scheduleHide() {
+    var elapsed = Date.now() - startTime;
+    var delay = Math.max(400, MIN_SHOW - elapsed);
+    setTimeout(hideLoader, delay);
+  }
 
-  // Fallback: hide loader after 6s even if page hasn't fully loaded
-  setTimeout(hideLoader, 6000);
+  if (document.readyState === 'complete') {
+    scheduleHide();
+  } else {
+    window.addEventListener('load', scheduleHide);
+  }
+
+  // Fallback: hide loader after 8s even if page hasn't fully loaded
+  setTimeout(hideLoader, 8000);
 
   // ====== Elements ======
   var nav = document.getElementById('nav');
