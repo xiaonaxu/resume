@@ -189,8 +189,6 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   letter-spacing: 2px;
   color: #fff;
   text-shadow: 0 2px 8px rgba(0,0,0,0.5), 0 0 40px rgba(0,0,0,0.2);
-  text-align: left;
-  width: auto;
 }
 .hero-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
 .hero-tag {
@@ -429,21 +427,6 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
 }
 
 /* ====== Content Animations ====== */
-
-/* Typing cursor */
-.typing-cursor {
-  display: inline;
-  font-weight: 300;
-  color: var(--mint);
-  animation: cursorBlink 0.8s step-end infinite;
-}
-.typing-cursor.done {
-  animation: cursorBlink 1.5s step-end infinite;
-}
-@keyframes cursorBlink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
 
 /* Number count-up */
 .num-rise {

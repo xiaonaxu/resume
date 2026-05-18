@@ -129,28 +129,6 @@
     obs.observe(el);
   });
 
-  // ====== Typewriter ======
-  var typewriters = document.querySelectorAll('.typewriter');
-  typewriters.forEach(function (tw) {
-    var text = tw.getAttribute('data-text') || '';
-    var speed = parseInt(tw.getAttribute('data-speed')) || 75;
-    var delay = parseInt(tw.getAttribute('data-delay')) || 0;
-    var cursor = tw.nextElementSibling;
-    var i = 0;
-
-    function type() {
-      if (i < text.length) {
-        tw.textContent += text.charAt(i);
-        i++;
-        setTimeout(type, speed);
-      } else {
-        if (cursor) cursor.classList.add('done');
-      }
-    }
-
-    setTimeout(type, delay);
-  });
-
   // ====== Number Count-up ======
   var numElements = document.querySelectorAll('.num-rise');
   var countObs = new IntersectionObserver(function (entries) {
