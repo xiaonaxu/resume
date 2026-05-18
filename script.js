@@ -392,15 +392,23 @@
   document.addEventListener('click', preloadMascot, { once: true });
   document.addEventListener('scroll', preloadMascot, { once: true });
 
-  // Button bounces the pet
+  // Button bounces the pet with audio
   var mascotBtn = document.getElementById('showMascot');
   mascotBtn.addEventListener('click', function (e) {
     e.preventDefault();
     preloadMascot();
     mascotPet.classList.remove('bounce');
-    void mascotPet.offsetWidth; // reflow
+    void mascotPet.offsetWidth;
     mascotPet.classList.add('bounce');
     mascotPet.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Unmute and play with sound
+    mascotVideo.muted = false;
+    mascotVideo.currentTime = 0;
+    mascotVideo.play().catch(function () {});
+    // Re-mute after playback
+    setTimeout(function () {
+      mascotVideo.muted = true;
+    }, 4000);
   });
 
   // Dragging
