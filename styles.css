@@ -340,6 +340,25 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
 }
 .exp-desc b { color: var(--gray-700); font-weight: 600; }
 
+.exp-video-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #8b5cf6;
+  padding: 6px 16px;
+  border: 1.5px solid #8b5cf6;
+  border-radius: var(--radius-full);
+  transition: all 0.25s;
+  align-self: flex-start;
+}
+.exp-video-link:hover {
+  background: #8b5cf6;
+  color: #fff;
+}
+
 /* ====== Skills ====== */
 .skills-grid {
   display: grid;
