@@ -372,15 +372,36 @@
 
   // ====== Mascot Modal ======
   var mascotOverlay = document.getElementById('mascotOverlay');
+  var mascotVideo = document.getElementById('mascotVideo');
+  var mascotPreloaded = false;
 
-  document.getElementById('showMascot').addEventListener('click', function () {
+  function preloadMascot() {
+    if (mascotPreloaded) return;
+    mascotPreloaded = true;
+    mascotVideo.load();
+    mascotVideo.play().catch(function () {}); // warm up
+    mascotVideo.pause();
+    mascotVideo.currentTime = 0;
+  }
+
+  var mascotBtn = document.getElementById('showMascot');
+  mascotBtn.addEventListener('mouseenter', preloadMascot);
+  mascotBtn.addEventListener('touchstart', preloadMascot, { once: true });
+
+  mascotBtn.addEventListener('click', function () {
+    preloadMascot();
     mascotOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
+    requestAnimationFrame(function () {
+      mascotVideo.currentTime = 0;
+      mascotVideo.play().catch(function () {});
+    });
   });
 
   function closeMascot() {
     mascotOverlay.classList.remove('open');
     document.body.style.overflow = '';
+    mascotVideo.pause();
   }
 
   document.getElementById('mascotClose').addEventListener('click', closeMascot);

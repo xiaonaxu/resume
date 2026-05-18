@@ -520,14 +520,13 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   position: fixed;
   inset: 0;
   z-index: 1080;
-  background: rgba(0,0,0,0.75);
-  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,0.78);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.35s ease, visibility 0.35s;
+  transition: opacity 0.3s ease, visibility 0.3s;
 }
 .mascot-overlay.open {
   opacity: 1;
