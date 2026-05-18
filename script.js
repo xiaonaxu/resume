@@ -33,6 +33,95 @@
   // Fallback: hide loader after 8s even if page hasn't fully loaded
   setTimeout(hideLoader, 8000);
 
+  // ====== Cursor Trail Particles ======
+  var canvas = document.getElementById('cursorTrail');
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var mouseX = -100;
+  var mouseY = -100;
+  var lastSpawn = 0;
+  var W, H;
+
+  function resizeCanvas() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  document.addEventListener('mousemove', function (e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  // Hide when mouse leaves
+  document.addEventListener('mouseleave', function () {
+    mouseX = -100;
+    mouseY = -100;
+  });
+
+  // Spawn particles
+  function spawnParticle(x, y) {
+    var angle = Math.random() * Math.PI * 2;
+    var speed = 0.3 + Math.random() * 1.2;
+    var colors = ['#c17f59', '#d4a574', '#e0b98a', '#f0d5b8', '#e8a87c', '#c9956b'];
+    particles.push({
+      x: x,
+      y: y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 0.3,
+      life: 1,
+      decay: 0.008 + Math.random() * 0.02,
+      size: 2 + Math.random() * 3.5,
+      color: colors[Math.floor(Math.random() * colors.length)]
+    });
+  }
+
+  function animateParticles(ts) {
+    ctx.clearRect(0, 0, W, H);
+
+    // Spawn near cursor
+    if (mouseX > 0 && mouseY > 0 && ts - lastSpawn > 16) {
+      var count = Math.floor(Math.random() * 2) + 1;
+      for (var j = 0; j < count; j++) {
+        spawnParticle(mouseX + (Math.random() - 0.5) * 12, mouseY + (Math.random() - 0.5) * 8);
+      }
+      lastSpawn = ts;
+    }
+
+    // Update and draw
+    for (var i = particles.length - 1; i >= 0; i--) {
+      var p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.01; // subtle gravity
+      p.life -= p.decay;
+
+      if (p.life <= 0) {
+        particles.splice(i, 1);
+        continue;
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.life * 0.7;
+      ctx.fill();
+
+      // Soft glow
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * p.life * 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.life * 0.12;
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    requestAnimationFrame(animateParticles);
+  }
+
+  requestAnimationFrame(animateParticles);
+
   // ====== Theme Toggle ======
   var themeToggle = document.getElementById('themeToggle');
   var html = document.documentElement;

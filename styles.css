@@ -928,6 +928,14 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   border-radius: var(--radius-full);
 }
 
+/* ====== Cursor Trail ====== */
+.cursor-trail {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+}
+
 /* ====== Scroll Progress ====== */
 .scroll-progress {
   position: fixed;
