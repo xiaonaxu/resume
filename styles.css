@@ -929,11 +929,12 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
 }
 
 /* ====== Cursor Trail ====== */
-.cursor-trail {
+.trail-particle {
   position: fixed;
-  inset: 0;
-  z-index: 9998;
   pointer-events: none;
+  border-radius: 50%;
+  z-index: 9998;
+  will-change: transform, opacity;
 }
 
 /* ====== Scroll Progress ====== */

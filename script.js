@@ -33,100 +33,67 @@
   // Fallback: hide loader after 8s even if page hasn't fully loaded
   setTimeout(hideLoader, 8000);
 
-  // ====== Cursor Trail Particles ======
-  var canvas = document.getElementById('cursorTrail');
-  var ctx = canvas.getContext('2d');
-  var particles = [];
-  var mouseX = -100;
-  var mouseY = -100;
-  var lastSpawn = 0;
-  var W, H;
+  // ====== Cursor Trail Particles (DOM) ======
+  var trailColors = ['#c17f59', '#d4a574', '#e0b98a', '#f0d5b8', '#e8a87c', '#f5c496', '#fff0e0'];
+  var trailLastSpawn = 0;
+  var trailActive = false;
 
-  function resizeCanvas() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
+  function createParticle(x, y) {
+    var el = document.createElement('div');
+    el.className = 'trail-particle';
+    var size = 3 + Math.random() * 6;
+    var color = trailColors[Math.floor(Math.random() * trailColors.length)];
+    var angle = Math.random() * Math.PI * 2;
+    var dist = 0;
+    var speed = 0.4 + Math.random() * 1.5;
+    var opacity = 1;
+    var decay = 0.012 + Math.random() * 0.025;
+    var vx = Math.cos(angle) * speed;
+    var vy = Math.sin(angle) * speed - 0.5;
+
+    el.style.cssText =
+      'left:' + x + 'px;' +
+      'top:' + y + 'px;' +
+      'width:' + size + 'px;' +
+      'height:' + size + 'px;' +
+      'background:' + color + ';' +
+      'box-shadow: 0 0 ' + (size * 2.5) + 'px ' + (size * 1.2) + 'px ' + color + ';';
+
+    document.body.appendChild(el);
+
+    function update() {
+      dist += speed;
+      x += vx;
+      y += vy;
+      vy += 0.012;
+      opacity -= decay;
+
+      if (opacity <= 0) {
+        el.remove();
+        return;
+      }
+
+      el.style.transform = 'translate(' + (dist * Math.cos(angle)) + 'px,' + (dist * Math.sin(angle) - dist * 0.3) + 'px)';
+      el.style.opacity = opacity;
+
+      requestAnimationFrame(update);
+    }
+
+    requestAnimationFrame(update);
   }
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
 
   document.addEventListener('mousemove', function (e) {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+    var now = performance.now();
+    if (now - trailLastSpawn < 25) return;
+    trailLastSpawn = now;
+    var count = Math.floor(Math.random() * 3) + 1;
+    for (var i = 0; i < count; i++) {
+      createParticle(
+        e.clientX + (Math.random() - 0.5) * 14,
+        e.clientY + (Math.random() - 0.5) * 8
+      );
+    }
   });
-
-  // Hide when mouse leaves
-  document.addEventListener('mouseleave', function () {
-    mouseX = -100;
-    mouseY = -100;
-  });
-
-  // Spawn particles
-  function spawnParticle(x, y) {
-    var angle = Math.random() * Math.PI * 2;
-    var speed = 0.5 + Math.random() * 1.8;
-    var colors = ['#c17f59', '#d4a574', '#e0b98a', '#f0d5b8', '#e8a87c', '#f5c496', '#fff0e0'];
-    particles.push({
-      x: x,
-      y: y,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed - 0.6,
-      life: 1,
-      decay: 0.006 + Math.random() * 0.018,
-      size: 3 + Math.random() * 5,
-      color: colors[Math.floor(Math.random() * colors.length)]
-    });
-  }
-
-  function animateParticles(ts) {
-    ctx.clearRect(0, 0, W, H);
-
-    // Spawn near cursor every ~30ms
-    if (mouseX > 0 && mouseY > 0 && ts - lastSpawn > 30) {
-      var count = Math.floor(Math.random() * 3) + 2;
-      for (var j = 0; j < count; j++) {
-        spawnParticle(mouseX + (Math.random() - 0.5) * 16, mouseY + (Math.random() - 0.5) * 10);
-      }
-      lastSpawn = ts;
-    }
-
-    // Update and draw
-    for (var i = particles.length - 1; i >= 0; i--) {
-      var p = particles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vy += 0.015;
-      p.life -= p.decay;
-
-      if (p.life <= 0) {
-        particles.splice(i, 1);
-        continue;
-      }
-
-      // Outer glow
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size * p.life * 3, 0, Math.PI * 2);
-      ctx.fillStyle = p.color;
-      ctx.globalAlpha = p.life * 0.15;
-      ctx.fill();
-
-      // Core
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
-      ctx.fillStyle = p.color;
-      ctx.globalAlpha = Math.min(p.life * 1.1, 1);
-      ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-
-    // Limit total particles
-    if (particles.length > 200) {
-      particles.splice(0, particles.length - 200);
-    }
-
-    requestAnimationFrame(animateParticles);
-  }
-
-  requestAnimationFrame(animateParticles);
 
   // ====== Theme Toggle ======
   var themeToggle = document.getElementById('themeToggle');
