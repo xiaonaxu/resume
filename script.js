@@ -179,9 +179,28 @@
     var heroBg = document.querySelector('.hero-bg-img');
     var heroContent = document.querySelector('.hero-content');
     if (heroBg && scrollTop < window.innerHeight) {
-      heroBg.style.transform = 'translateY(' + (scrollTop * 0.35) + 'px) scale(1.05)';
-      heroContent.style.transform = 'translateY(' + (scrollTop * 0.12) + 'px)';
-      heroContent.style.opacity = Math.max(0, 1 - scrollTop / (window.innerHeight * 0.7));
+      // Release CSS animation so JS transform can take over
+      if (!heroContent.dataset.parallaxReady) {
+        heroContent.addEventListener('animationend', function () {
+          heroContent.style.animation = 'none';
+          heroContent.style.opacity = '1';
+          heroContent.style.transform = 'translateY(0)';
+          heroContent.dataset.parallaxReady = '1';
+        }, { once: true });
+        // Fallback if animation already ended
+        if (heroContent.style.opacity === '1' || getComputedStyle(heroContent).opacity > 0.9) {
+          heroContent.style.animation = 'none';
+          heroContent.style.opacity = '1';
+          heroContent.style.transform = 'translateY(0)';
+          heroContent.dataset.parallaxReady = '1';
+        }
+      }
+
+      if (heroContent.dataset.parallaxReady) {
+        heroBg.style.transform = 'translateY(' + (scrollTop * 0.35) + 'px) scale(1.05)';
+        heroContent.style.transform = 'translateY(' + (scrollTop * 0.12) + 'px)';
+        heroContent.style.opacity = Math.max(0, 1 - scrollTop / (window.innerHeight * 0.7));
+      }
     }
 
     // Scroll progress
