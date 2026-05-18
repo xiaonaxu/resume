@@ -222,26 +222,33 @@
   ];
   var photos = photoFiles.map(function (f) { return 'zhijiao-photos/' + f; });
   var currentIndex = 0;
+  var galleryBuilt = false;
 
-  // Build gallery grid
-  var galleryGrid = document.getElementById('galleryGrid');
-  photos.forEach(function (src, idx) {
-    var item = document.createElement('div');
-    item.className = 'gallery-item';
-    item.innerHTML = '<img src="' + src + '" alt="支教照片 ' + (idx + 1) + '" loading="lazy">';
-    item.addEventListener('click', function () { openLightbox(idx); });
-    galleryGrid.appendChild(item);
-  });
+  function buildGallery() {
+    if (galleryBuilt) return;
+    galleryBuilt = true;
+    var galleryGrid = document.getElementById('galleryGrid');
+    photos.forEach(function (src, idx) {
+      var item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.innerHTML = '<img src="' + src + '" alt="支教照片 ' + (idx + 1) + '" loading="lazy">';
+      item.addEventListener('click', function () { openLightbox(idx); });
+      galleryGrid.appendChild(item);
+    });
+  }
 
   // Open gallery
   var galleryOverlay = document.getElementById('galleryOverlay');
   document.getElementById('openGallery').addEventListener('click', function () {
+    buildGallery();
     galleryOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
-    // Stagger reveal
-    var items = galleryGrid.querySelectorAll('.gallery-item');
-    items.forEach(function (item, i) {
-      setTimeout(function () { item.classList.add('revealed'); }, i * 50);
+    // Stagger reveal after a tick for DOM to settle
+    requestAnimationFrame(function () {
+      var items = galleryGrid.querySelectorAll('.gallery-item');
+      items.forEach(function (item, i) {
+        setTimeout(function () { item.classList.add('revealed'); }, i * 40);
+      });
     });
   });
 
