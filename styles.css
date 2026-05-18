@@ -425,6 +425,69 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   cursor: pointer;
 }
 
+/* ====== PDF Viewer ====== */
+.pdf-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  background: rgba(0,0,0,0.92);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s;
+}
+.pdf-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+.pdf-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: rgba(0,0,0,0.6);
+  flex-shrink: 0;
+}
+.pdf-title {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+}
+.pdf-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pdf-download-btn {
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  padding: 6px 16px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: var(--radius-sm);
+  transition: background 0.25s;
+}
+.pdf-download-btn:hover { background: rgba(255,255,255,0.15); }
+.pdf-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.25s;
+}
+.pdf-close-btn:hover { background: rgba(255,255,255,0.22); }
+.pdf-overlay iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+}
+
 /* ====== Gallery Overlay ====== */
 .gallery-overlay {
   position: fixed;

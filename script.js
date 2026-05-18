@@ -200,6 +200,38 @@
 
   highlights.forEach(function (el) { hlObs.observe(el); });
 
+  // ====== PDF Viewer ======
+  var pdfOverlay = document.getElementById('pdfOverlay');
+  var pdfFrame = document.getElementById('pdfFrame');
+
+  document.getElementById('previewResume').addEventListener('click', function () {
+    pdfFrame.src = '许晓娜简历.pdf';
+    pdfOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  document.getElementById('pdfClose').addEventListener('click', function () {
+    pdfOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(function () { pdfFrame.src = ''; }, 400);
+  });
+
+  pdfOverlay.addEventListener('click', function (e) {
+    if (e.target === pdfOverlay) {
+      pdfOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(function () { pdfFrame.src = ''; }, 400);
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && pdfOverlay.classList.contains('open')) {
+      pdfOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(function () { pdfFrame.src = ''; }, 400);
+    }
+  });
+
   // ====== Gallery ======
   var photoFiles = [
     '微信图片_20260518213903.jpg',

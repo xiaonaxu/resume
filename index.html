@@ -237,6 +237,10 @@
               </div>
             </div>
             <div class="about-btns">
+              <button class="btn btn-outline" id="previewResume">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                预览简历
+              </button>
               <a href="许晓娜简历.pdf" class="btn btn-outline" download>下载简历</a>
               <button class="btn btn-mint" onclick="navigator.clipboard.writeText('18954843094').then(function(){var t=this;t.textContent='已复制!';setTimeout(function(){t.textContent='联系我'},1500)}.bind(this))">联系我</button>
             </div>
@@ -491,6 +495,20 @@
       </span>
     </div>
   </footer>
+
+  <!-- ====== PDF Viewer Overlay ====== -->
+  <div class="pdf-overlay" id="pdfOverlay">
+    <div class="pdf-topbar">
+      <span class="pdf-title">许晓娜 — 简历</span>
+      <div class="pdf-topbar-actions">
+        <a class="pdf-download-btn" href="许晓娜简历.pdf" download>下载</a>
+        <button class="pdf-close-btn" id="pdfClose">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+    <iframe id="pdfFrame" src="" title="简历预览"></iframe>
+  </div>
 
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
