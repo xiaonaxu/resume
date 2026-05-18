@@ -519,8 +519,8 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
 .mascot-pet {
   position: fixed;
   bottom: 28px;
-  right: 28px;
-  z-index: 90;
+  left: 28px;
+  z-index: 89;
   cursor: grab;
   user-select: none;
   display: flex;
@@ -541,10 +541,11 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   height: 100px;
   border-radius: 50%;
   overflow: hidden;
+  background: #1a1a1a;
   box-shadow:
-    0 0 0 3px rgba(193,127,89,0.25),
-    0 0 20px rgba(193,127,89,0.18),
-    0 8px 32px rgba(0,0,0,0.15),
+    0 0 0 4px rgba(193,127,89,0.35),
+    0 0 24px rgba(193,127,89,0.22),
+    0 8px 32px rgba(0,0,0,0.2),
     inset 0 0 0 2px rgba(255,255,255,0.1);
   transform: perspective(600px) rotateY(-8deg) rotateX(4deg);
   transition: transform 0.4s var(--ease), box-shadow 0.4s;

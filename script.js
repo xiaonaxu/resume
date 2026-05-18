@@ -378,10 +378,17 @@
   function preloadMascot() {
     if (mascotPreloaded) return;
     mascotPreloaded = true;
-    mascotVideo.play().catch(function () {});
+    mascotVideo.muted = true;
+    mascotVideo.play().catch(function () {
+      // Retry on next interaction
+      mascotPreloaded = false;
+    });
   }
 
-  // Preload on any interaction
+  // Try immediately
+  preloadMascot();
+
+  // Also try on any interaction as fallback
   document.addEventListener('click', preloadMascot, { once: true });
   document.addEventListener('scroll', preloadMascot, { once: true });
 
