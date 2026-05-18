@@ -33,6 +33,29 @@
   // Fallback: hide loader after 8s even if page hasn't fully loaded
   setTimeout(hideLoader, 8000);
 
+  // ====== Theme Toggle ======
+  var themeToggle = document.getElementById('themeToggle');
+  var html = document.documentElement;
+
+  function setTheme(theme) {
+    html.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    themeToggle.classList.toggle('dark', theme === 'dark');
+  }
+
+  // Init theme
+  var saved = localStorage.getItem('theme');
+  if (saved) {
+    setTheme(saved);
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    setTheme('dark');
+  }
+
+  themeToggle.addEventListener('click', function () {
+    var current = html.getAttribute('data-theme');
+    setTheme(current === 'dark' ? 'light' : 'dark');
+  });
+
   // ====== Elements ======
   var nav = document.getElementById('nav');
   var navLinks = document.getElementById('navLinks');
