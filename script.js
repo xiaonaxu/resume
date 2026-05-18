@@ -200,6 +200,114 @@
 
   highlights.forEach(function (el) { hlObs.observe(el); });
 
+  // ====== Gallery ======
+  var photoFiles = [
+    '微信图片_20260518213903.jpg',
+    '微信图片_20260518213927.jpg',
+    '微信图片_20260518214126.jpg',
+    '微信图片_202605182141261.jpg',
+    '微信图片_2026051821412610.jpg',
+    '微信图片_2026051821412611.jpg',
+    '微信图片_2026051821412612.jpg',
+    '微信图片_2026051821412613.jpg',
+    '微信图片_2026051821412614.jpg',
+    '微信图片_202605182141262.jpg',
+    '微信图片_202605182141263.jpg',
+    '微信图片_202605182141264.jpg',
+    '微信图片_202605182141265.jpg',
+    '微信图片_202605182141266.jpg',
+    '微信图片_202605182141267.jpg',
+    '微信图片_202605182141268.jpg',
+    '微信图片_202605182141269.jpg'
+  ];
+  var photos = photoFiles.map(function (f) { return 'zhijiao-photos/' + f; });
+  var currentIndex = 0;
+
+  // Build gallery grid
+  var galleryGrid = document.getElementById('galleryGrid');
+  photos.forEach(function (src, idx) {
+    var item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.innerHTML = '<img src="' + src + '" alt="支教照片 ' + (idx + 1) + '" loading="lazy">';
+    item.addEventListener('click', function () { openLightbox(idx); });
+    galleryGrid.appendChild(item);
+  });
+
+  // Open gallery
+  var galleryOverlay = document.getElementById('galleryOverlay');
+  document.getElementById('openGallery').addEventListener('click', function () {
+    galleryOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    // Stagger reveal
+    var items = galleryGrid.querySelectorAll('.gallery-item');
+    items.forEach(function (item, i) {
+      setTimeout(function () { item.classList.add('revealed'); }, i * 50);
+    });
+  });
+
+  document.getElementById('galleryClose').addEventListener('click', function () {
+    galleryOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+
+  galleryOverlay.addEventListener('click', function (e) {
+    if (e.target === galleryOverlay) {
+      galleryOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Lightbox
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightboxImg');
+  var lightboxCounter = document.getElementById('lightboxCounter');
+
+  function openLightbox(idx) {
+    currentIndex = idx;
+    lightboxImg.src = photos[idx];
+    lightboxCounter.textContent = (idx + 1) + ' / ' + photos.length;
+    lightbox.classList.add('open');
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+  }
+
+  function navLightbox(dir) {
+    currentIndex = (currentIndex + dir + photos.length) % photos.length;
+    lightboxImg.src = photos[currentIndex];
+    lightboxCounter.textContent = (currentIndex + 1) + ' / ' + photos.length;
+  }
+
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  document.getElementById('lightboxPrev').addEventListener('click', function () { navLightbox(-1); });
+  document.getElementById('lightboxNext').addEventListener('click', function () { navLightbox(1); });
+
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lightbox.classList.contains('open') && !galleryOverlay.classList.contains('open')) return;
+    if (e.key === 'Escape') {
+      if (lightbox.classList.contains('open')) closeLightbox();
+      else {
+        galleryOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
+    if (e.key === 'ArrowLeft' && lightbox.classList.contains('open')) navLightbox(-1);
+    if (e.key === 'ArrowRight' && lightbox.classList.contains('open')) navLightbox(1);
+  });
+
+  // Touch swipe for lightbox
+  var touchStartX = 0;
+  lightbox.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; });
+  lightbox.addEventListener('touchend', function (e) {
+    var diff = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(diff) > 50) navLightbox(diff < 0 ? 1 : -1);
+  });
+
   // ====== 3D Tilt ======
   var isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   if (!isTouch) {

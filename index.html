@@ -367,10 +367,16 @@
               <p class="exp-desc">
                 为乡村中学学生设计并落地古法造纸、苗族蜡染等非遗主题实践课程，带领 150 余名学生完成从原料处理到作品成型的全流程体验，累计授课 <span class="num-rise" data-target="120">0</span>+ 小时，<span class="highlight">课堂参与率 100%</span>。指导学生创作 200 余件非遗手工作品。项目获评知行计划国家级优秀实践项目，非遗美育课程手册被组委会收录为可复用教学案例。
               </p>
-              <a class="exp-video-link" href="zhijiao.mp4" target="_blank">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                查看支教视频
-              </a>
+              <div class="exp-links">
+                <a class="exp-video-link" href="zhijiao.mp4" target="_blank">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  查看支教视频
+                </a>
+                <button class="exp-video-link exp-gallery-btn" id="openGallery">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  查看支教相册
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -483,6 +489,33 @@
   <button class="back-to-top" id="backToTop" aria-label="回到顶部">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
   </button>
+
+  <!-- ====== Gallery Overlay ====== -->
+  <div class="gallery-overlay" id="galleryOverlay">
+    <div class="gallery-topbar">
+      <h3 class="gallery-title">门村中学支教现场</h3>
+      <button class="gallery-close-btn" id="galleryClose">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+
+  <!-- ====== Lightbox ====== -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <div class="lightbox-counter" id="lightboxCounter">1 / 17</div>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
