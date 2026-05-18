@@ -63,16 +63,16 @@
   // Spawn particles
   function spawnParticle(x, y) {
     var angle = Math.random() * Math.PI * 2;
-    var speed = 0.3 + Math.random() * 1.2;
-    var colors = ['#c17f59', '#d4a574', '#e0b98a', '#f0d5b8', '#e8a87c', '#c9956b'];
+    var speed = 0.5 + Math.random() * 1.8;
+    var colors = ['#c17f59', '#d4a574', '#e0b98a', '#f0d5b8', '#e8a87c', '#f5c496', '#fff0e0'];
     particles.push({
       x: x,
       y: y,
       vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed - 0.3,
+      vy: Math.sin(angle) * speed - 0.6,
       life: 1,
-      decay: 0.008 + Math.random() * 0.02,
-      size: 2 + Math.random() * 3.5,
+      decay: 0.006 + Math.random() * 0.018,
+      size: 3 + Math.random() * 5,
       color: colors[Math.floor(Math.random() * colors.length)]
     });
   }
@@ -80,11 +80,11 @@
   function animateParticles(ts) {
     ctx.clearRect(0, 0, W, H);
 
-    // Spawn near cursor
-    if (mouseX > 0 && mouseY > 0 && ts - lastSpawn > 16) {
-      var count = Math.floor(Math.random() * 2) + 1;
+    // Spawn near cursor every ~30ms
+    if (mouseX > 0 && mouseY > 0 && ts - lastSpawn > 30) {
+      var count = Math.floor(Math.random() * 3) + 2;
       for (var j = 0; j < count; j++) {
-        spawnParticle(mouseX + (Math.random() - 0.5) * 12, mouseY + (Math.random() - 0.5) * 8);
+        spawnParticle(mouseX + (Math.random() - 0.5) * 16, mouseY + (Math.random() - 0.5) * 10);
       }
       lastSpawn = ts;
     }
@@ -94,7 +94,7 @@
       var p = particles[i];
       p.x += p.vx;
       p.y += p.vy;
-      p.vy += 0.01; // subtle gravity
+      p.vy += 0.015;
       p.life -= p.decay;
 
       if (p.life <= 0) {
@@ -102,20 +102,26 @@
         continue;
       }
 
+      // Outer glow
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * p.life * 3, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.life * 0.15;
+      ctx.fill();
+
+      // Core
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
       ctx.fillStyle = p.color;
-      ctx.globalAlpha = p.life * 0.7;
-      ctx.fill();
-
-      // Soft glow
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size * p.life * 2.5, 0, Math.PI * 2);
-      ctx.fillStyle = p.color;
-      ctx.globalAlpha = p.life * 0.12;
+      ctx.globalAlpha = Math.min(p.life * 1.1, 1);
       ctx.fill();
     }
     ctx.globalAlpha = 1;
+
+    // Limit total particles
+    if (particles.length > 200) {
+      particles.splice(0, particles.length - 200);
+    }
 
     requestAnimationFrame(animateParticles);
   }
