@@ -189,6 +189,8 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   letter-spacing: 2px;
   color: #fff;
   text-shadow: 0 2px 8px rgba(0,0,0,0.5), 0 0 40px rgba(0,0,0,0.2);
+  text-align: left;
+  width: auto;
 }
 .hero-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
 .hero-tag {
