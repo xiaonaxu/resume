@@ -172,10 +172,19 @@
   }
 
   window.addEventListener('scroll', function () {
+    var scrollTop = window.scrollY;
     updateNav();
 
+    // Hero parallax
+    var heroBg = document.querySelector('.hero-bg-img');
+    var heroContent = document.querySelector('.hero-content');
+    if (heroBg && scrollTop < window.innerHeight) {
+      heroBg.style.transform = 'translateY(' + (scrollTop * 0.35) + 'px) scale(1.05)';
+      heroContent.style.transform = 'translateY(' + (scrollTop * 0.12) + 'px)';
+      heroContent.style.opacity = Math.max(0, 1 - scrollTop / (window.innerHeight * 0.7));
+    }
+
     // Scroll progress
-    var scrollTop = window.scrollY;
     var docHeight = document.documentElement.scrollHeight - window.innerHeight;
     var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
     document.getElementById('scrollProgress').style.width = progress + '%';
