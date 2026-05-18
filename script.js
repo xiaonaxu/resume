@@ -133,22 +133,31 @@
   var typewriters = document.querySelectorAll('.typewriter');
   typewriters.forEach(function (tw) {
     var text = tw.getAttribute('data-text') || '';
-    var speed = parseInt(tw.getAttribute('data-speed')) || 60;
+    var interval = parseInt(tw.getAttribute('data-speed')) || 70;
     var delay = parseInt(tw.getAttribute('data-delay')) || 0;
     var cursor = tw.nextElementSibling;
     var i = 0;
+    var lastTime = 0;
 
-    function type() {
+    function type(ts) {
+      if (i === 0) lastTime = ts;
       if (i < text.length) {
-        tw.textContent += text.charAt(i);
-        i++;
-        setTimeout(type, speed + Math.random() * 40);
+        if (ts - lastTime >= interval) {
+          tw.textContent += text.charAt(i);
+          i++;
+          lastTime = ts;
+        }
+        requestAnimationFrame(type);
       } else {
         if (cursor) cursor.classList.add('done');
       }
     }
 
-    setTimeout(type, delay);
+    if (delay > 0) {
+      setTimeout(function () { requestAnimationFrame(type); }, delay);
+    } else {
+      requestAnimationFrame(type);
+    }
   });
 
   // ====== Number Count-up ======
