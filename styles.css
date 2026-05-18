@@ -361,8 +361,14 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   gap: 24px;
   padding: 28px 0;
   border-bottom: 1px solid var(--gray-200);
+  transition: transform 0.5s var(--ease), box-shadow 0.4s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 .exp-card:last-child { border-bottom: none; padding-bottom: 0; }
+.exp-card:hover {
+  box-shadow: var(--shadow-lg);
+}
 .exp-period {
   display: flex;
   flex-direction: column;
@@ -408,6 +414,16 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
 .exp-video-link:hover {
   background: var(--mint);
   color: #fff;
+}
+
+/* ====== Dark mode card overrides ====== */
+[data-theme="dark"] .skill-card {
+  background: rgba(35,24,32,0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+[data-theme="dark"] .skill-card:hover {
+  background: rgba(35,24,32,0.8);
 }
 
 /* ====== Content Animations ====== */
@@ -461,15 +477,21 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   padding: 24px;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius-md);
-  background: var(--white);
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: border-color 0.25s, box-shadow 0.25s;
+  transition: transform 0.5s var(--ease), border-color 0.3s, box-shadow 0.3s, background 0.3s;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 .skill-card:hover {
   border-color: var(--mint);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
+  background: rgba(255,255,255,0.8);
+  transform: translateY(-4px);
 }
 .skill-icon {
   width: 40px; height: 40px;
@@ -477,6 +499,12 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   background: var(--mint-light);
   border-radius: var(--radius-sm);
   color: var(--mint-hover);
+  transition: transform 0.3s var(--ease), background 0.3s;
+}
+.skill-card:hover .skill-icon {
+  transform: scale(1.15) rotate(-5deg);
+  background: var(--mint);
+  color: #fff;
 }
 .skill-name { font-size: 16px; font-weight: 700; color: var(--black); }
 .skill-desc { font-size: 13px; color: var(--gray-500); line-height: 1.6; }

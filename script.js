@@ -210,4 +210,31 @@
 
   highlights.forEach(function (el) { hlObs.observe(el); });
 
+  // ====== 3D Tilt ======
+  var isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  if (!isTouch) {
+    var tiltCards = document.querySelectorAll('.exp-card, .skill-card');
+    var TILT_MAX = 6;
+
+    tiltCards.forEach(function (card) {
+      card.addEventListener('mouseenter', function () {
+        card.style.transition = 'none';
+      });
+
+      card.addEventListener('mousemove', function (e) {
+        var rect = card.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        var rx = ((y / rect.height) - 0.5) * -TILT_MAX;
+        var ry = ((x / rect.width) - 0.5) * TILT_MAX;
+        card.style.transform = 'perspective(800px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) scale3d(1.02,1.02,1.02)';
+      });
+
+      card.addEventListener('mouseleave', function () {
+        card.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)';
+        card.style.transform = '';
+      });
+    });
+  }
+
 })();
