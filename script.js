@@ -129,4 +129,76 @@
     obs.observe(el);
   });
 
+  // ====== Typewriter ======
+  var typewriters = document.querySelectorAll('.typewriter');
+  typewriters.forEach(function (tw) {
+    var text = tw.getAttribute('data-text') || '';
+    var speed = parseInt(tw.getAttribute('data-speed')) || 60;
+    var delay = parseInt(tw.getAttribute('data-delay')) || 0;
+    var cursor = tw.nextElementSibling;
+    var i = 0;
+
+    function type() {
+      if (i < text.length) {
+        tw.textContent += text.charAt(i);
+        i++;
+        setTimeout(type, speed + Math.random() * 40);
+      } else {
+        if (cursor) cursor.classList.add('done');
+      }
+    }
+
+    setTimeout(type, delay);
+  });
+
+  // ====== Number Count-up ======
+  var numElements = document.querySelectorAll('.num-rise');
+  var countObs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      var el = entry.target;
+      var target = parseFloat(el.getAttribute('data-target'));
+      if (isNaN(target)) return;
+      var duration = 1500;
+      var startTime = null;
+
+      function step(ts) {
+        if (!startTime) startTime = ts;
+        var progress = Math.min((ts - startTime) / duration, 1);
+        // Ease-out
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var current = target * eased;
+        if (target >= 100 && target % 1 === 0) {
+          el.textContent = Math.floor(current);
+        } else if (target < 100) {
+          el.textContent = current.toFixed(1);
+        } else {
+          el.textContent = Math.floor(current);
+        }
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.textContent = target % 1 === 0 ? target : target.toFixed(1);
+        }
+      }
+      requestAnimationFrame(step);
+      countObs.unobserve(el);
+    });
+  }, { threshold: 0.4 });
+
+  numElements.forEach(function (el) { countObs.observe(el); });
+
+  // ====== Highlight reveal ======
+  var highlights = document.querySelectorAll('.highlight');
+  var hlObs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        hlObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.6 });
+
+  highlights.forEach(function (el) { hlObs.observe(el); });
+
 })();
