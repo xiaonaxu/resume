@@ -401,14 +401,18 @@
     void mascotPet.offsetWidth;
     mascotPet.classList.add('bounce');
     mascotPet.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    // Unmute and play with sound
+    // Pause, unmute, restart with sound (user-click triggered)
+    mascotVideo.pause();
     mascotVideo.muted = false;
     mascotVideo.currentTime = 0;
-    mascotVideo.play().catch(function () {});
-    // Re-mute after playback
-    setTimeout(function () {
+    mascotVideo.play().then(function () {
+      // Re-mute after playback
+      setTimeout(function () {
+        mascotVideo.muted = true;
+      }, 4000);
+    }).catch(function () {
       mascotVideo.muted = true;
-    }, 4000);
+    });
   });
 
   // Dragging
