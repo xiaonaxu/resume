@@ -203,33 +203,38 @@
   // ====== PDF Viewer ======
   var pdfOverlay = document.getElementById('pdfOverlay');
   var pdfFrame = document.getElementById('pdfFrame');
+  var pdfLoading = document.getElementById('pdfLoading');
+
+  pdfFrame.addEventListener('load', function () {
+    pdfLoading.style.display = 'none';
+    pdfFrame.classList.add('loaded');
+  });
 
   document.getElementById('previewResume').addEventListener('click', function () {
+    pdfLoading.style.display = '';
+    pdfFrame.classList.remove('loaded');
     pdfFrame.src = '许晓娜简历.pdf';
     pdfOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   });
 
-  document.getElementById('pdfClose').addEventListener('click', function () {
+  function closePdf() {
     pdfOverlay.classList.remove('open');
     document.body.style.overflow = '';
-    setTimeout(function () { pdfFrame.src = ''; }, 400);
-  });
+    setTimeout(function () {
+      pdfFrame.src = '';
+      pdfFrame.classList.remove('loaded');
+    }, 400);
+  }
+
+  document.getElementById('pdfClose').addEventListener('click', closePdf);
 
   pdfOverlay.addEventListener('click', function (e) {
-    if (e.target === pdfOverlay) {
-      pdfOverlay.classList.remove('open');
-      document.body.style.overflow = '';
-      setTimeout(function () { pdfFrame.src = ''; }, 400);
-    }
+    if (e.target === pdfOverlay) closePdf();
   });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && pdfOverlay.classList.contains('open')) {
-      pdfOverlay.classList.remove('open');
-      document.body.style.overflow = '';
-      setTimeout(function () { pdfFrame.src = ''; }, 400);
-    }
+    if (e.key === 'Escape' && pdfOverlay.classList.contains('open')) closePdf();
   });
 
   // ====== Gallery ======
