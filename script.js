@@ -370,46 +370,91 @@
     if (Math.abs(diff) > 50) navLightbox(diff < 0 ? 1 : -1);
   });
 
-  // ====== Mascot Modal ======
-  var mascotOverlay = document.getElementById('mascotOverlay');
+  // ====== Mascot Pet ======
+  var mascotPet = document.getElementById('mascotPet');
   var mascotVideo = document.getElementById('mascotVideo');
   var mascotPreloaded = false;
 
   function preloadMascot() {
     if (mascotPreloaded) return;
     mascotPreloaded = true;
-    mascotVideo.load();
-    mascotVideo.play().catch(function () {}); // warm up
-    mascotVideo.pause();
-    mascotVideo.currentTime = 0;
+    mascotVideo.play().catch(function () {});
   }
 
+  // Preload on any interaction
+  document.addEventListener('click', preloadMascot, { once: true });
+  document.addEventListener('scroll', preloadMascot, { once: true });
+
+  // Button bounces the pet
   var mascotBtn = document.getElementById('showMascot');
-  mascotBtn.addEventListener('mouseenter', preloadMascot);
-  mascotBtn.addEventListener('touchstart', preloadMascot, { once: true });
-
-  mascotBtn.addEventListener('click', function () {
+  mascotBtn.addEventListener('click', function (e) {
+    e.preventDefault();
     preloadMascot();
-    mascotOverlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    requestAnimationFrame(function () {
-      mascotVideo.currentTime = 0;
-      mascotVideo.play().catch(function () {});
-    });
+    mascotPet.classList.remove('bounce');
+    void mascotPet.offsetWidth; // reflow
+    mascotPet.classList.add('bounce');
+    mascotPet.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 
-  function closeMascot() {
-    mascotOverlay.classList.remove('open');
-    document.body.style.overflow = '';
-    mascotVideo.pause();
-  }
-
-  document.getElementById('mascotClose').addEventListener('click', closeMascot);
-  mascotOverlay.addEventListener('click', function (e) {
-    if (e.target === mascotOverlay) closeMascot();
+  // Dragging
+  var dragging = false, dragStartX, dragStartY, petStartX, petStartY;
+  mascotPet.addEventListener('mousedown', function (e) {
+    if (e.button !== 0) return;
+    dragging = true;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    var rect = mascotPet.getBoundingClientRect();
+    petStartX = rect.left;
+    petStartY = rect.top;
+    mascotPet.style.animation = 'none';
+    mascotPet.style.transition = 'none';
+    e.preventDefault();
   });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && mascotOverlay.classList.contains('open')) closeMascot();
+
+  document.addEventListener('mousemove', function (e) {
+    if (!dragging) return;
+    var dx = e.clientX - dragStartX;
+    var dy = e.clientY - dragStartY;
+    mascotPet.style.right = 'auto';
+    mascotPet.style.bottom = 'auto';
+    mascotPet.style.left = (petStartX + dx) + 'px';
+    mascotPet.style.top = (petStartY + dy) + 'px';
+  });
+
+  document.addEventListener('mouseup', function () {
+    if (!dragging) return;
+    dragging = false;
+    mascotPet.style.transition = '';
+    mascotPet.style.animation = '';
+  });
+
+  // Touch drag
+  mascotPet.addEventListener('touchstart', function (e) {
+    dragging = true;
+    dragStartX = e.touches[0].clientX;
+    dragStartY = e.touches[0].clientY;
+    var rect = mascotPet.getBoundingClientRect();
+    petStartX = rect.left;
+    petStartY = rect.top;
+    mascotPet.style.animation = 'none';
+    mascotPet.style.transition = 'none';
+  }, { passive: false });
+
+  document.addEventListener('touchmove', function (e) {
+    if (!dragging) return;
+    var dx = e.touches[0].clientX - dragStartX;
+    var dy = e.touches[0].clientY - dragStartY;
+    mascotPet.style.right = 'auto';
+    mascotPet.style.bottom = 'auto';
+    mascotPet.style.left = (petStartX + dx) + 'px';
+    mascotPet.style.top = (petStartY + dy) + 'px';
+  }, { passive: false });
+
+  document.addEventListener('touchend', function () {
+    if (!dragging) return;
+    dragging = false;
+    mascotPet.style.transition = '';
+    mascotPet.style.animation = '';
   });
 
   // ====== 3D Tilt ======

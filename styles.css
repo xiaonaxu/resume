@@ -515,67 +515,133 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   to { transform: rotate(360deg); }
 }
 
-/* ====== Mascot Modal ====== */
-.mascot-overlay {
+/* ====== Mascot Pet ====== */
+.mascot-pet {
   position: fixed;
-  inset: 0;
-  z-index: 1080;
-  background: rgba(0,0,0,0.78);
+  bottom: 28px;
+  right: 28px;
+  z-index: 90;
+  cursor: grab;
+  user-select: none;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s;
+  gap: 6px;
+  animation: petFloat 4s ease-in-out infinite;
+  transition: filter 0.3s;
 }
-.mascot-overlay.open {
-  opacity: 1;
-  visibility: visible;
+.mascot-pet:active { cursor: grabbing; }
+.mascot-pet.bounce {
+  animation: petBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.mascot-modal {
+
+.mascot-bubble {
   position: relative;
-  background: var(--bg);
-  border-radius: 20px;
-  padding: 16px;
-  max-width: 420px;
-  width: 90vw;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.35);
-  transform: scale(0.8) translateY(30px);
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.mascot-overlay.open .mascot-modal {
-  transform: scale(1) translateY(0);
-}
-.mascot-close {
-  position: absolute;
-  top: -12px; right: -12px;
-  width: 36px; height: 36px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  background: var(--white);
-  color: var(--gray-700);
-  border: 1px solid var(--gray-200);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-md);
-  transition: background 0.25s, transform 0.2s;
-  z-index: 2;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 3px rgba(193,127,89,0.25),
+    0 0 20px rgba(193,127,89,0.18),
+    0 8px 32px rgba(0,0,0,0.15),
+    inset 0 0 0 2px rgba(255,255,255,0.1);
+  transform: perspective(600px) rotateY(-8deg) rotateX(4deg);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s;
 }
-.mascot-close:hover { background: var(--gray-100); transform: scale(1.1); }
-.mascot-label {
-  text-align: center;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--gray-700);
-  margin-bottom: 10px;
-  letter-spacing: 0.03em;
+.mascot-bubble:hover {
+  transform: perspective(600px) rotateY(0deg) rotateX(0deg) scale(1.08);
+  box-shadow:
+    0 0 0 4px rgba(193,127,89,0.4),
+    0 0 36px rgba(193,127,89,0.3),
+    0 12px 40px rgba(0,0,0,0.2),
+    inset 0 0 0 2px rgba(255,255,255,0.15);
 }
+
+.mascot-glow {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(193,127,89,0.15) 0%, transparent 70%);
+  animation: glowPulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.mascot-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(193,127,89,0.15);
+  animation: ringSpin 8s linear infinite;
+  pointer-events: none;
+}
+
 .mascot-video {
-  display: block;
   width: 100%;
-  border-radius: 12px;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
   background: #000;
+}
+
+.mascot-sparkle {
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #d4a574;
+  pointer-events: none;
+  animation: sparkleFloat 2.5s ease-in-out infinite;
+}
+.mascot-sparkle.s1 { top: -6px; left: 20%; animation-delay: 0s; }
+.mascot-sparkle.s2 { top: 10%; right: -8px; animation-delay: 0.5s; }
+.mascot-sparkle.s3 { bottom: 15%; right: -4px; animation-delay: 1.2s; }
+.mascot-sparkle.s4 { bottom: -4px; left: 30%; animation-delay: 1.8s; }
+
+.mascot-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mint);
+  background: var(--mint-light);
+  padding: 3px 12px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.04em;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.3s, transform 0.3s var(--ease);
+}
+.mascot-pet:hover .mascot-tag {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes petFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes petBounce {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.18); }
+  60% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+@keyframes ringSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes sparkleFloat {
+  0%, 100% { opacity: 0; transform: translateY(0) scale(0); }
+  30% { opacity: 1; transform: translateY(-8px) scale(1); }
+  60% { opacity: 1; transform: translateY(-14px) scale(0.6); }
+  100% { opacity: 0; transform: translateY(-20px) scale(0); }
+}
+
+@media (max-width: 768px) {
+  .mascot-pet { bottom: 16px; right: 12px; }
+  .mascot-bubble { width: 72px; height: 72px; }
 }
 
 /* ====== Gallery Overlay ====== */
