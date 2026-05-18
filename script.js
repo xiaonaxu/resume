@@ -370,6 +370,27 @@
     if (Math.abs(diff) > 50) navLightbox(diff < 0 ? 1 : -1);
   });
 
+  // ====== Mascot Modal ======
+  var mascotOverlay = document.getElementById('mascotOverlay');
+
+  document.getElementById('showMascot').addEventListener('click', function () {
+    mascotOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  function closeMascot() {
+    mascotOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('mascotClose').addEventListener('click', closeMascot);
+  mascotOverlay.addEventListener('click', function (e) {
+    if (e.target === mascotOverlay) closeMascot();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && mascotOverlay.classList.contains('open')) closeMascot();
+  });
+
   // ====== 3D Tilt ======
   var isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   if (!isTouch) {
