@@ -502,6 +502,106 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   .hero-tag { font-size: 11px; padding: 5px 12px; }
 }
 
+/* ====== Loader ====== */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: linear-gradient(135deg, #1e1b2e 0%, #2d2840 40%, #1a1828 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  transition: opacity 0.5s var(--ease), visibility 0.5s;
+}
+.loader-overlay.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-scene {
+  width: min(85vw, 440px);
+  animation: loaderFloat 3s ease-in-out infinite;
+}
+.loader-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Computer push animation */
+.computer-group {
+  animation: computerNudge 2.4s ease-in-out infinite;
+}
+.girl-group {
+  animation: girlPush 2.4s ease-in-out infinite;
+  transform-origin: 200px 260px;
+}
+
+.loader-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.loader-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.08em;
+  animation: loaderTextPulse 2s ease-in-out infinite;
+}
+
+.loader-bar-track {
+  width: 180px;
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.loader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+  border-radius: 2px;
+  animation: loaderBarFill 2.5s ease-out forwards;
+}
+
+/* Keyframes */
+@keyframes loaderFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes computerNudge {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(4px); }
+  35% { transform: translateX(2px); }
+  50% { transform: translateX(0); }
+}
+
+@keyframes girlPush {
+  0%, 100% { transform: rotate(0deg); }
+  15% { transform: rotate(-3deg); }
+  35% { transform: rotate(-1deg); }
+  50% { transform: rotate(0deg); }
+}
+
+@keyframes loaderTextPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes loaderBarFill {
+  0% { width: 0%; }
+  30% { width: 35%; }
+  60% { width: 65%; }
+  85% { width: 85%; }
+  100% { width: 100%; }
+}
+
 /* ====== Print ====== */
 @media print {
   .nav, .hero-bg, .hero-overlay, .hero-tag, .ai-matcher, .footer { display: none !important; }

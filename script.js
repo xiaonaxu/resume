@@ -1,6 +1,28 @@
 (function () {
   'use strict';
 
+  // ====== Loader ======
+  var loader = document.getElementById('loader');
+  var loaderHidden = false;
+
+  function hideLoader() {
+    if (loaderHidden) return;
+    loaderHidden = true;
+    loader.classList.add('fade-out');
+    setTimeout(function () {
+      if (loader && loader.parentNode) {
+        loader.parentNode.removeChild(loader);
+      }
+    }, 600);
+  }
+
+  window.addEventListener('load', function () {
+    setTimeout(hideLoader, 800);
+  });
+
+  // Fallback: hide loader after 6s even if page hasn't fully loaded
+  setTimeout(hideLoader, 6000);
+
   // ====== Elements ======
   var nav = document.getElementById('nav');
   var navLinks = document.getElementById('navLinks');

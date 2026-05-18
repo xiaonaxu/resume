@@ -15,6 +15,151 @@
 </head>
 <body>
 
+  <!-- ====== Loading Screen ====== -->
+  <div class="loader-overlay" id="loader">
+    <div class="loader-scene">
+      <svg viewBox="0 0 480 340" fill="none" xmlns="http://www.w3.org/2000/svg" class="loader-svg">
+        <defs>
+          <linearGradient id="monitorGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#e2e8f0"/>
+            <stop offset="100%" stop-color="#cbd5e1"/>
+          </linearGradient>
+          <linearGradient id="screenGlow" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.05"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Floor shadow -->
+        <ellipse cx="240" cy="305" rx="160" ry="7" fill="#1a1a2e" opacity="0.25"/>
+
+        <!-- === COMPUTER (side/back view, 100x scale) === -->
+        <g class="computer-group">
+          <!-- Monitor back angled panel -->
+          <path d="M235 55 L265 48 L265 252 L235 255 Z" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1.5"/>
+          <!-- Monitor side thickness -->
+          <rect x="265" y="48" width="26" height="204" rx="5" fill="url(#monitorGrad)"/>
+          <!-- Top edge highlight -->
+          <rect x="265" y="48" width="26" height="4" rx="2" fill="#f1f5f9"/>
+          <!-- Vent lines on back panel -->
+          <line x1="242" y1="82" x2="262" y2="79" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+          <line x1="242" y1="94" x2="262" y2="91" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+          <line x1="242" y1="106" x2="262" y2="103" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+          <!-- Logo/sticker area -->
+          <rect x="247" y="140" width="14" height="14" rx="3" fill="#fff" opacity="0.4"/>
+          <circle cx="254" cy="147" r="3.5" fill="#8b5cf6" opacity="0.3"/>
+          <!-- Ports -->
+          <rect x="269" y="236" width="12" height="4" rx="2" fill="#94a3b8" opacity="0.7"/>
+          <rect x="269" y="243" width="8" height="3" rx="1.5" fill="#94a3b8" opacity="0.5"/>
+
+          <!-- Screen bezel (right face) -->
+          <rect x="291" y="40" width="9" height="220" rx="3" fill="#1e293b"/>
+          <!-- Screen glow -->
+          <rect x="300" y="50" width="20" height="200" rx="2" fill="url(#screenGlow)"/>
+          <!-- Screen content lines (subtle) -->
+          <rect x="304" y="72" width="11" height="3" rx="1.5" fill="#a78bfa" opacity="0.25"/>
+          <rect x="304" y="82" width="8" height="3" rx="1.5" fill="#a78bfa" opacity="0.18"/>
+          <rect x="304" y="92" width="12" height="3" rx="1.5" fill="#a78bfa" opacity="0.22"/>
+          <rect x="304" y="102" width="7" height="3" rx="1.5" fill="#a78bfa" opacity="0.15"/>
+
+          <!-- Stand neck -->
+          <path d="M260 252 L280 250 L274 280 L248 278 Z" fill="#94a3b8"/>
+          <!-- Stand base -->
+          <rect x="222" y="278" width="82" height="8" rx="4" fill="#64748b"/>
+        </g>
+
+        <!-- === GIRL (tiny, pushing giant computer) === -->
+        <g class="girl-group">
+          <!-- Girl floor shadow -->
+          <ellipse cx="200" cy="284" rx="18" ry="3.5" fill="#1a1a2e" opacity="0.18"/>
+
+          <!-- Left leg (back) -->
+          <line x1="195" y1="262" x2="188" y2="280" stroke="#fbbf9b" stroke-width="5.5" stroke-linecap="round"/>
+          <!-- Right leg (front, stride) -->
+          <line x1="207" y1="262" x2="213" y2="280" stroke="#fbbf9b" stroke-width="5.5" stroke-linecap="round"/>
+
+          <!-- Shoes -->
+          <ellipse cx="186" cy="282" rx="7" ry="3.5" fill="#3d2b1f"/>
+          <ellipse cx="215" cy="282" rx="7" ry="3.5" fill="#3d2b1f"/>
+
+          <!-- Body / dress -->
+          <path d="M188 238 L183 264 L209 264 L206 238 Z" fill="#f472b6"/>
+
+          <!-- Left arm (reaching to push monitor) -->
+          <line x1="190" y1="248" x2="235" y2="238" stroke="#fbbf9b" stroke-width="5" stroke-linecap="round"/>
+          <!-- Right arm -->
+          <line x1="202" y1="250" x2="237" y2="254" stroke="#fbbf9b" stroke-width="5" stroke-linecap="round"/>
+
+          <!-- Hands (tiny, gripping monitor back edge) -->
+          <circle cx="236" cy="237" r="3.5" fill="#fbbf9b"/>
+          <circle cx="238" cy="254" r="3.5" fill="#fbbf9b"/>
+
+          <!-- Head -->
+          <circle cx="198" cy="222" r="16" fill="#fbbf9b"/>
+
+          <!-- Hair back -->
+          <path d="M182 220 Q182 200 198 202 Q214 200 214 220" fill="#3d2b1f"/>
+          <!-- Side strands -->
+          <rect x="182" y="212" width="5" height="13" rx="2.5" fill="#3d2b1f"/>
+          <rect x="209" y="212" width="5" height="13" rx="2.5" fill="#3d2b1f"/>
+
+          <!-- Hair buns (double bun style) -->
+          <circle cx="182" cy="208" r="9" fill="#3d2b1f"/>
+          <circle cx="214" cy="208" r="9" fill="#3d2b1f"/>
+          <!-- Bun ties -->
+          <circle cx="182" cy="208" r="3" fill="#f472b6" opacity="0.7"/>
+          <circle cx="214" cy="208" r="3" fill="#f472b6" opacity="0.7"/>
+
+          <!-- Bangs -->
+          <path d="M187 214 Q198 207 209 214" fill="#3d2b1f"/>
+
+          <!-- Eyes (determined, focused) -->
+          <circle cx="192" cy="222" r="2.2" fill="#1e293b"/>
+          <circle cx="204" cy="222" r="2.2" fill="#1e293b"/>
+          <!-- Eye highlights -->
+          <circle cx="192.8" cy="221" r="0.9" fill="#fff"/>
+          <circle cx="204.8" cy="221" r="0.9" fill="#fff"/>
+
+          <!-- Tiny determined mouth -->
+          <path d="M196 229 L201 229" stroke="#d4877a" stroke-width="1.8" stroke-linecap="round"/>
+
+          <!-- Blush -->
+          <circle cx="187" cy="226" r="3.5" fill="#ffb3a7" opacity="0.45"/>
+          <circle cx="209" cy="226" r="3.5" fill="#ffb3a7" opacity="0.45"/>
+        </g>
+
+        <!-- === Sweat drops === -->
+        <g class="sweat-group">
+          <path d="M222 208 Q224 200 226 208 Q224 212 222 208Z" fill="#8b5cf6" opacity="0.55">
+            <animate attributeName="opacity" values="0.55;0" dur="2.2s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="translate" values="0,0;6,-22" dur="2.2s" repeatCount="indefinite"/>
+          </path>
+          <path d="M228 215 Q229.5 208 231 215 Q229.5 218 228 215Z" fill="#8b5cf6" opacity="0.4">
+            <animate attributeName="opacity" values="0;0.4;0" dur="2.8s" begin="0.8s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="translate" values="0,0;4,-18" dur="2.8s" begin="0.8s" repeatCount="indefinite"/>
+          </path>
+        </g>
+
+        <!-- === Motion lines (effort near feet) === -->
+        <g opacity="0.35">
+          <line x1="176" y1="285" x2="165" y2="285" stroke="#64748b" stroke-width="1.8" stroke-linecap="round">
+            <animate attributeName="opacity" values="0.7;0" dur="1.3s" repeatCount="indefinite"/>
+          </line>
+          <line x1="178" y1="289" x2="168" y2="289" stroke="#64748b" stroke-width="1.2" stroke-linecap="round">
+            <animate attributeName="opacity" values="0;0.5;0" dur="1.9s" begin="0.4s" repeatCount="indefinite"/>
+          </line>
+        </g>
+      </svg>
+    </div>
+
+    <div class="loader-info">
+      <p class="loader-text">正在加载...</p>
+      <div class="loader-bar-track">
+        <div class="loader-bar-fill"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- ====== Navigation ====== -->
   <header class="nav" id="nav">
     <div class="nav-inner">
