@@ -432,6 +432,29 @@
     if (e.key === 'Escape' && pdfOverlay.classList.contains('open')) closePdf();
   });
 
+  // ====== Course Videos Modal ======
+  var courseModal = document.getElementById('courseModal');
+  document.getElementById('openCourseVideos').addEventListener('click', function () {
+    courseModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+  document.getElementById('courseModalClose').addEventListener('click', function () {
+    courseModal.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+  courseModal.addEventListener('click', function (e) {
+    if (e.target === courseModal) {
+      courseModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && courseModal.classList.contains('open')) {
+      courseModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+
   // ====== Gallery ======
   var photoFiles = [
     '微信图片_20260518213903.jpg',
