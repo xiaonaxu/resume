@@ -208,6 +208,25 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
 }
 .hero-tag:hover { background: rgba(255,255,255,0.15); }
 
+.hero-meta {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.hero-meta-item {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.8);
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+.hero-meta-sep {
+  color: rgba(255,255,255,0.3);
+  font-size: 12px;
+}
+
 /* Nav change on scroll past hero */
 .nav.on-content {
   background: rgba(255,255,255,0.92);
@@ -1058,6 +1077,7 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   .hero-content { align-items: center; }
   .hero-line { font-size: clamp(1.6rem, 6vw, 2.4rem); }
   .hero-tags { justify-content: center; }
+  .hero-meta { justify-content: center; }
 
   /* About */
   .about-grid {
