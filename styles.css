@@ -454,15 +454,15 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   display: flex;
   justify-content: center;
   padding: 0 24px;
-  margin-top: 40px;
-  margin-bottom: -20px;
+  margin-top: 44px;
+  margin-bottom: -16px;
   position: relative;
   z-index: 2;
 }
 .polaroid-flip {
-  perspective: 1000px;
-  width: 200px;
-  height: 260px;
+  perspective: 1200px;
+  width: 210px;
+  height: 270px;
 }
 .polaroid-card {
   position: relative;
@@ -470,22 +470,24 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   height: 100%;
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
+  transform: rotate(-3deg);
   cursor: pointer;
 }
 .polaroid-flip:hover .polaroid-card {
-  transform: rotateY(180deg);
+  transform: rotateY(180deg) rotate(2deg);
 }
 .polaroid-front,
 .polaroid-back {
   position: absolute;
   inset: 0;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   background: #faf7f3;
-  padding: 10px 10px 36px;
-  border-radius: 4px;
+  padding: 10px 10px 38px;
+  border-radius: 3px;
   box-shadow:
     0 2px 6px rgba(0,0,0,0.08),
-    0 8px 20px rgba(0,0,0,0.1);
+    0 8px 22px rgba(0,0,0,0.12);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -495,10 +497,10 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   background: #2a1e22;
 }
 .polaroid-front {
-  transform: rotate(-3deg);
+  transform: rotateY(0deg);
 }
 .polaroid-back {
-  transform: rotateY(180deg) rotate(2deg);
+  transform: rotateY(180deg);
 }
 .polaroid-front img,
 .polaroid-back img {
@@ -509,9 +511,9 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
 }
 .polaroid-tag {
   position: absolute;
-  bottom: 10px;
+  bottom: 12px;
   font-family: 'Noto Serif SC', 'STSong', serif;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--gray-500);
   letter-spacing: 0.06em;
 }
