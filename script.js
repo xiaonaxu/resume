@@ -33,6 +33,56 @@
   // Fallback: hide loader after 8s even if page hasn't fully loaded
   setTimeout(hideLoader, 8000);
 
+  // ====== Haptic Sounds (Web Audio API) ======
+  var AudioCtx = window.AudioContext || window.webkitAudioContext;
+  var audioCtx = null;
+
+  function ensureAudio() {
+    if (!audioCtx) audioCtx = new AudioCtx();
+  }
+
+  function playRustle() {
+    ensureAudio();
+    var duration = 0.12;
+    var bufferSize = audioCtx.sampleRate * duration;
+    var buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    var data = buffer.getChannelData(0);
+    for (var i = 0; i < bufferSize; i++) {
+      var t = i / audioCtx.sampleRate;
+      var env = Math.exp(-t * 35);
+      data[i] = (Math.random() * 2 - 1) * env * 0.25;
+    }
+    var source = audioCtx.createBufferSource();
+    var filter = audioCtx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 3000;
+    filter.Q.value = 0.8;
+    source.buffer = buffer;
+    source.connect(filter);
+    filter.connect(audioCtx.destination);
+    source.start();
+  }
+
+  function playSoftClick() {
+    ensureAudio();
+    var osc = audioCtx.createOscillator();
+    var gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = 800;
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.06);
+  }
+
+  // Wire up haptic sounds to interactions
+  document.getElementById('themeToggle').addEventListener('click', playSoftClick);
+  document.getElementById('openGallery').addEventListener('click', playRustle);
+  document.getElementById('previewResume').addEventListener('click', playRustle);
+  document.getElementById('showMascot').addEventListener('click', playSoftClick);
+
   // ====== Cursor Trail Particles (DOM) ======
   (function () {
     var colors = ['#c17f59', '#d4a574', '#e0b98a', '#f0d5b8', '#e8a87c', '#f5c496'];
