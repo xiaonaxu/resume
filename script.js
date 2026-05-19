@@ -260,18 +260,37 @@
     var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
     document.getElementById('scrollProgress').style.width = progress + '%';
 
-    // Back to top
-    var backToTop = document.getElementById('backToTop');
-    if (scrollTop > 500) {
-      backToTop.classList.add('visible');
-    } else {
-      backToTop.classList.remove('visible');
+    // Dye ring
+    var dyeRing = document.getElementById('dyeRing');
+    var dyeArc = document.getElementById('dyeArc');
+    var dyePetals = document.getElementById('dyePetals');
+    var CIRCUMFERENCE = 169.65;
+
+    if (dyeRing) {
+      if (scrollTop > 400) {
+        dyeRing.classList.add('visible');
+      } else {
+        dyeRing.classList.remove('visible');
+        dyeRing.classList.remove('bloom');
+      }
+
+      var dyeProgress = Math.min(progress, 100);
+      var offset = CIRCUMFERENCE - (dyeProgress / 100) * CIRCUMFERENCE;
+      dyeArc.setAttribute('stroke-dashoffset', offset);
+
+      // Bloom at 100%
+      if (dyeProgress >= 99 && !dyeRing.classList.contains('bloom')) {
+        dyeRing.classList.add('bloom');
+      }
+      if (dyeProgress < 99 && dyeRing.classList.contains('bloom')) {
+        dyeRing.classList.remove('bloom');
+      }
     }
   }, { passive: true });
   updateNav();
 
-  // Back to top click
-  document.getElementById('backToTop').addEventListener('click', function () {
+  // Dye ring click to top
+  document.getElementById('dyeRing').addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
