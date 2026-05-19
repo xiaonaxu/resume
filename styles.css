@@ -509,15 +509,6 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   object-fit: cover;
   border-radius: 2px;
 }
-.polaroid-tag {
-  position: absolute;
-  bottom: 12px;
-  font-family: 'Noto Serif SC', 'STSong', serif;
-  font-size: 11px;
-  color: var(--gray-500);
-  letter-spacing: 0.06em;
-}
-
 @media (max-width: 768px) {
   .polaroid-flip { width: 160px; height: 210px; }
 }
