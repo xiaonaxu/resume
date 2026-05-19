@@ -210,6 +210,22 @@
     }
   }, 1500);
 
+  // ====== Folded note reveal ======
+  var foldedLines = document.querySelectorAll('.folded-line');
+  var foldedObs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        foldedObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.6 });
+
+  foldedLines.forEach(function (line, i) {
+    line.style.transitionDelay = (i * 0.15) + 's';
+    foldedObs.observe(line);
+  });
+
   // ====== Scroll reveal ======
   var obs = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
