@@ -36,52 +36,78 @@
   // ====== Haptic Sounds (Web Audio API) ======
   var AudioCtx = window.AudioContext || window.webkitAudioContext;
   var audioCtx = null;
+  var audioReady = false;
 
-  function ensureAudio() {
-    if (!audioCtx) audioCtx = new AudioCtx();
+  function initAudio() {
+    if (audioReady) return;
+    if (!audioCtx) {
+      try { audioCtx = new AudioCtx(); } catch (e) { return; }
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().then(function () {
+        audioReady = true;
+      }).catch(function () {});
+    } else {
+      audioReady = true;
+    }
   }
 
   function playRustle() {
-    ensureAudio();
-    var duration = 0.12;
-    var bufferSize = audioCtx.sampleRate * duration;
-    var buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    var data = buffer.getChannelData(0);
-    for (var i = 0; i < bufferSize; i++) {
-      var t = i / audioCtx.sampleRate;
-      var env = Math.exp(-t * 35);
-      data[i] = (Math.random() * 2 - 1) * env * 0.25;
-    }
-    var source = audioCtx.createBufferSource();
-    var filter = audioCtx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.value = 3000;
-    filter.Q.value = 0.8;
-    source.buffer = buffer;
-    source.connect(filter);
-    filter.connect(audioCtx.destination);
-    source.start();
+    initAudio();
+    if (!audioReady || !audioCtx) return;
+    try {
+      var duration = 0.14;
+      var sr = audioCtx.sampleRate;
+      var len = Math.floor(sr * duration);
+      var buffer = audioCtx.createBuffer(1, len, sr);
+      var data = buffer.getChannelData(0);
+      for (var i = 0; i < len; i++) {
+        var t = i / sr;
+        var env = Math.exp(-t * 30);
+        data[i] = (Math.random() * 2 - 1) * env * 0.5;
+      }
+      var source = audioCtx.createBufferSource();
+      var filter = audioCtx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(2500, audioCtx.currentTime);
+      filter.Q.setValueAtTime(0.7, audioCtx.currentTime);
+      var gainNode = audioCtx.createGain();
+      gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+      source.buffer = buffer;
+      source.connect(filter);
+      filter.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      source.start();
+    } catch (e) {}
   }
 
   function playSoftClick() {
-    ensureAudio();
-    var osc = audioCtx.createOscillator();
-    var gain = audioCtx.createGain();
-    osc.type = 'sine';
-    osc.frequency.value = 800;
-    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.06);
+    initAudio();
+    if (!audioReady || !audioCtx) return;
+    try {
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.05);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.08);
+    } catch (e) {}
   }
 
-  // Wire up haptic sounds to interactions
+  // Init audio on first user interaction, then wire sounds
+  document.addEventListener('click', function initOnce() {
+    initAudio();
+  }, { once: true });
+
   document.getElementById('themeToggle').addEventListener('click', playSoftClick);
   document.getElementById('openGallery').addEventListener('click', playRustle);
   document.getElementById('previewResume').addEventListener('click', playRustle);
-  document.getElementById('showMascot').addEventListener('click', playSoftClick);
+  document.getElementById('showMascot').addEventListener('click', playRustle);
 
   // ====== Cursor Trail Particles (DOM) ======
   (function () {
