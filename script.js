@@ -219,12 +219,19 @@
         foldedObs.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.6 });
+  }, { threshold: 0.2, rootMargin: '0px 0px -20px 0px' });
 
   foldedLines.forEach(function (line, i) {
     line.style.transitionDelay = (i * 0.15) + 's';
     foldedObs.observe(line);
   });
+
+  // Fallback: reveal after 2s if not already
+  setTimeout(function () {
+    foldedLines.forEach(function (line) {
+      line.classList.add('revealed');
+    });
+  }, 2500);
 
   // ====== Scroll reveal ======
   var obs = new IntersectionObserver(function (entries) {
